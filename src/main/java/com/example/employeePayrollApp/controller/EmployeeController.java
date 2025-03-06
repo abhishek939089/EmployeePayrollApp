@@ -1,5 +1,6 @@
 package com.example.employeePayrollApp.controller;
 
+import com.example.employeePayrollApp.dto.EmployeeDTO;
 import com.example.employeePayrollApp.model.Employee;
 import com.example.employeePayrollApp.repository.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
@@ -27,19 +28,23 @@ public class EmployeeController {
         return employeeRepository.findById(id).orElse(null);
     }
 
-    // POST: Add a new employee
+    // POST: Add a new employee using DTO
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public Employee createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setDepartment(employeeDTO.getDepartment()); // Added department
+        employee.setSalary(employeeDTO.getSalary());
         return employeeRepository.save(employee);
     }
 
-    // PUT: Update an employee
+    // PUT: Update an employee using DTO
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
         return employeeRepository.findById(id).map(employee -> {
-            employee.setName(updatedEmployee.getName());
-            employee.setDepartment(updatedEmployee.getDepartment());
-            employee.setSalary(updatedEmployee.getSalary());
+            employee.setName(employeeDTO.getName());
+            employee.setDepartment(employeeDTO.getDepartment()); // Added department
+            employee.setSalary(employeeDTO.getSalary());
             return employeeRepository.save(employee);
         }).orElse(null);
     }
