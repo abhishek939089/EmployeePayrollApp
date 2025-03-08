@@ -3,13 +3,16 @@ package com.example.employeePayrollApp.controller;
 import com.example.employeePayrollApp.model.Employee;
 import com.example.employeePayrollApp.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/employees")
+@Validated  // Enables method-level validation
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -30,15 +33,15 @@ public class EmployeeController {
         return employeeService.getEmployeeById(id);
     }
 
-    // POST: Add a new employee
+    // POST: Add a new employee with validation
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public Employee createEmployee(@Valid @RequestBody Employee employee) {
         return employeeService.createEmployee(employee);
     }
 
-    // PUT: Update an employee
+    // PUT: Update an employee with validation
     @PutMapping("/{id}")
-    public Optional<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
+    public Optional<Employee> updateEmployee(@PathVariable Long id, @Valid @RequestBody Employee updatedEmployee) {
         return employeeService.updateEmployee(id, updatedEmployee);
     }
 
